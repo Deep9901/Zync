@@ -1,34 +1,48 @@
+// Import necessary modules
 import express from "express";
-
-import authRoutes from "./routes/auth.route.js";
-import messageRoutes from "./routes/message.route.js"
-
-import { connectDB } from "./lib/db.js";
-
-import cors from "cors";
+import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import dotenv from 'dotenv';
+import cors from "cors";
+import path from "path";
 
+// Import custom modules
+import { connectDB } from "./lib/db.js";
+import authRoutes from "./routes/auth.route.js";
+import messageRoutes from "./routes/message.route.js";
+import { app, server } from "./lib/socket.js";
+
+// Load environment variables
 dotenv.config();
 
-const app = express();
-const port = process.env.PORT || 3000;
+// Configure server port and directory
+const PORT = process.env.PORT;
+const __dirname = path.resolve();
 
-// middlewares
+// Apply middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
-})
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    })
 );
 
-// routes
+// Define API routes
 app.use("/api/auth", authRoutes);
-app.use("/api/message", messageRoutes);
+app.use("/api/messages", messageRoutes);
 
-// server running
-app.listen(port, () => { 
-    console.log(`🚀 Server listening on port ${port}!`) 
+// Serve static assets in production
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    });
+}
+
+// Start the server and connect to the database
+server.listen(PORT, () => {
+    console.log("server is running on PORT:" + PORT);
     connectDB();
 });
