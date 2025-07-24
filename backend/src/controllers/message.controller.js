@@ -7,11 +7,9 @@ import cloudinary from "../lib/cloudinary.js";
 // Import Socket.IO utility functions
 import { getReceiverSocketId, io } from "../lib/socket.js";
 
-/**
- * Controller to get users for the sidebar (excluding the logged-in user).
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- */
+
+// Controller to get users for the sidebar (excluding the logged-in user).
+
 export const getUsersForSidebar = async (req, res) => {
     try {
         // Get the ID of the currently logged-in user from the request
@@ -30,11 +28,8 @@ export const getUsersForSidebar = async (req, res) => {
     }
 };
 
-/**
- * Controller to get messages between two users.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- */
+// Controller to get messages between two users.
+
 export const getMessages = async (req, res) => {
     try {
         // Extract the ID of the user to chat with from request parameters
@@ -63,10 +58,8 @@ export const getMessages = async (req, res) => {
 
 //   Controller to send a new message.
 //   Handles text and image messages, including Cloudinary upload for images.
-//   @param {Object} req - The request object.
-//   @param {Object} res - The response object.
 
-export const sendMessage = async (req, res) => {
+export const sendMessages = async (req, res) => {
     try {
         // Extract text and image from the request body
         const { text, image } = req.body;
