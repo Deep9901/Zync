@@ -72,7 +72,7 @@ export const sendMessages = async (req, res) => {
         // If an image is provided, upload it to Cloudinary
         if (image) {
             const uploadResponse = await cloudinary.uploader.upload(image);
-            imageUrl = uploadResponse.secure_url; // Get the secure URL of the uploaded image
+            imageUrl = uploadResponse.secure_url;
         }
 
         // Create a new message instance
@@ -80,7 +80,7 @@ export const sendMessages = async (req, res) => {
             senderId,
             receiverId,
             text,
-            image: imageUrl, // Store the image URL if available
+            image: imageUrl, 
         });
 
         // Save the new message to the database
